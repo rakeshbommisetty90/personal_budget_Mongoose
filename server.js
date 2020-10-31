@@ -8,7 +8,7 @@ const port =3000;
 var url = "mongodb://localhost:27017/personalBudget";
 //const budget=require('./budget.json');
 var budgetModel=require('./models/budgetData');
-const loadData = require("./LoadData");
+const budget = require("./budget");
 const router = express.Router()
 
 
@@ -24,7 +24,7 @@ mongoose.connect(url,{useNewUrlParser:true, useUnifiedTopology:true})
 app.use(cors());
 
 app.get('/budget', (req,res)=>{
-    res.json(loadData);
+    res.json(budget);
 });
 
 app.listen(port,()=>{
