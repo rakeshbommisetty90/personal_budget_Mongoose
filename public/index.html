@@ -116,17 +116,7 @@
             datasets: [
                 {
                     data: [],
-                    backgroundColor:[
-                        'blue',
-                        'green',
-                        'red',
-                        '#2d545e',
-                        "#9df9ef",
-                        "#edf756",
-                        "gray",
-                        "brown",
-                        "pink"
-                    ]
+                    backgroundColor:[]
                 }
             ],
             labels: []
@@ -139,11 +129,12 @@
             });
         };
         function getBudget(){
-            axios.get('http://localhost:3000/budget')
+            axios.get('http://localhost:3000/api/budget')
             .then(function(res){
-                for(var i=0;i<res.data.myBudget.length;i++){
-                    dataSource.datasets[0].data[i] = res.data.myBudget[i].budget;
-                    dataSource.labels[i]=res.data.myBudget[i].title;
+                for(var i=0;i<res.data.length;i++){
+                    dataSource.datasets[0].data[i] = res.data[i].budget;
+                    dataSource.datasets[0].backgroundColor[i] = res.data[i].color;
+                    dataSource.labels[i]=res.data[i].title;
                 }
                 createChart();
             })
@@ -153,28 +144,21 @@
 
     var data_budget = [];
     var labels = [];
+    var backgroundColor = [];
     var color;
 
     function getBudget1() {
-      axios.get("http://localhost:3000/budget").then(function (res) {
-        for (var i = 0; i < res.data.myBudget.length; i++) {
-          data_budget.push(res.data.myBudget[i].budget);
-          labels.push(res.data.myBudget[i].title);
+      axios.get("http://localhost:3000/api/budget").then(function (res) {
+        for (var i = 0; i < res.data.length; i++) {
+          data_budget.push(res.data[i].budget);
+          labels.push(res.data[i].title);
+          backgroundColor.push(res.data[i].color);
         }
         color = d3.scale
           .ordinal()
           .domain(labels)
-          .range([
-            "#ff1d58",
-            "#494D5F",
-            "#fff685",
-            "#00DDFF",
-            "#0049B7",
-            "#f75990",
-            "#ff8c00",
-            "#8458B3",
-            "#d0743c"
-          ]);
+          .range(backgroundColor);
+        
         function gend3Data() {
           var labels = color.domain();
           var i = 0;

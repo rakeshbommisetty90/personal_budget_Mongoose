@@ -1,14 +1,32 @@
 // Budget API
 const express=require('express');
 const cors=require('cors');
+const mongoose=require("mongoose");
+const routes=require("./routes");
 const app=express();
 const port =3000;
-const budget=require('./budget.json');
+var url = "mongodb://localhost:27017/personalBudget";
+//const budget=require('./budget.json');
+var budgetModel=require('./models/budgetData');
+const loadData = require("./LoadData");
+const router = express.Router()
+
+
+mongoose.connect(url,{useNewUrlParser:true, useUnifiedTopology:true})
+        .then(()=>{
+            app.use(express.json())
+            app.use("/api",routes)
+        })
+        .catch((connectionError)=>{
+          console.log(connectionError)
+        })
+
 app.use(cors());
 
 app.get('/budget', (req,res)=>{
-    res.send(budget);
-})
+    res.json(loadData);
+});
+
 app.listen(port,()=>{
     console.log(` API Served in this http://localhost:${port}`)
 });
